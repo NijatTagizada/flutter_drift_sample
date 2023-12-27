@@ -34,7 +34,7 @@ class HomePage extends ConsumerWidget {
             itemBuilder: (context, index) {
               return ListTile(
                 title: Text(data[index].title),
-                subtitle: Text(data[index].type),
+                subtitle: Text(data[index].type.typeName),
                 onTap: () async {
                   /// Open detail package
                   await Navigator.push(

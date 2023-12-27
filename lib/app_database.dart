@@ -53,23 +53,33 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<TaskModel>> getAllTasks() async {
     final query = select(taskTable).join([
+      /// Join taskTable with typeTable with typeTable id
       innerJoin(
         typeTable,
         taskTable.type.equalsExp(typeTable.id),
       ),
+
+      /// Join taskTable with attendantTable with taskTable id
       innerJoin(
         attendantTable,
         attendantTable.taskId.equalsExp(taskTable.id),
       ),
     ]);
 
+    /// Order our result depending on id
     query.orderBy([OrderingTerm.desc(taskTable.id)]);
 
+    /// Select statement with join returns return Future of List<TypedResult>
+    /// Each [TypedResult] represents a row from which data can be read.
+    /// It contains a rawData getter to obtain the raw columns.
+    /// But more importantly, the [readTable] method can be used to read a data class from a table.
     final queryResult = await query.get();
 
     final groupedData = <TaskModel, List<AttendantModel>>{};
 
+    /// Parsing result
     for (var row in queryResult) {
+      /// [readTable] method can be used to read a data class from a table.
       final task = row.readTable(taskTable);
       final type = row.readTable(typeTable);
       final attendant = row.readTable(attendantTable);
@@ -77,15 +87,17 @@ class AppDatabase extends _$AppDatabase {
       final taskModel = TaskModel(
         id: task.id,
         title: task.title,
-        type: type.typeName,
+        type: TypeModel(id: type.id, typeName: type.typeName),
         attendant: const [],
       );
 
+      /// For each entry (row) that is included in a task, put it in the map of items.
       final attendantList = groupedData.putIfAbsent(taskModel, () => []);
 
       attendantList.add(AttendantModel(id: attendant.id, name: attendant.name));
     }
 
+    /// Merge the map of tasks with the map of entries
     return groupedData.entries
         .map((e) => e.key.copyWith(attendant: e.value))
         .toList();

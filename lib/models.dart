@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class TaskModel extends Equatable {
   final int id;
   final String title;
-  final String type;
+  final TypeModel type;
   final List<AttendantModel> attendant;
 
   const TaskModel({
@@ -18,7 +18,7 @@ class TaskModel extends Equatable {
   TaskModel copyWith({
     int? id,
     String? title,
-    String? type,
+    TypeModel? type,
     List<AttendantModel>? attendant,
   }) {
     return TaskModel(
