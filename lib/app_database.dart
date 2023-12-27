@@ -35,6 +35,7 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async {
+          /// create all tables
           m.createAll();
 
           /// Insert some data when the application is run for the first time
