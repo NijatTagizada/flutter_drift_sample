@@ -94,6 +94,7 @@ class AppDatabase extends _$AppDatabase {
       /// For each entry (row) that is included in a task, put it in the map of items.
       final attendantList = groupedData.putIfAbsent(taskModel, () => []);
 
+      /// Include an attendant in the [groupedData] associated with the respective task.
       attendantList.add(AttendantModel(id: attendant.id, name: attendant.name));
     }
 
