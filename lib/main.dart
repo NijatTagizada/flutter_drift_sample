@@ -182,6 +182,7 @@ class _AddTaskState extends ConsumerState<AddTask> {
                               );
 
                           ref.read(homeProvider.notifier).getAllTask();
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context);
                         }
                       },
